@@ -8,7 +8,7 @@ const bottom = (on: any, model = 'claude-sonnet-5-5') => {
   on('tool.call', () => ({ result: 'ok' }))
 }
 
-test('"general" no autoriza, "genera" sí', async ($, on) => {
+test('"general" no autoriza, "genera" sí', async ($: any, on) => {
   bottom(on)
   const a = await $.prompt.submit({ text: 'quiero algo general' })
   expect(a.context?.join(' ')).toContain('NO dijo "genera"')
@@ -16,7 +16,7 @@ test('"general" no autoriza, "genera" sí', async ($, on) => {
   expect(b.context?.join(' ')).toContain('puedes escribir código')
 })
 
-test('el candado niega Edit sin "genera" y lo permite con él', async ($, on) => {
+test('el candado niega Edit sin "genera" y lo permite con él', async ($: any, on) => {
   bottom(on)
   await $.prompt.submit({ text: 'hola' })
   const denied = await $.tool.call({ tool: 'Edit', file_path: '/x', old_string: 'a', new_string: 'b' })
@@ -26,19 +26,19 @@ test('el candado niega Edit sin "genera" y lo permite con él', async ($, on) =>
   expect(JSON.stringify(ok)).not.toContain('falta tu')
 })
 
-test('/planear manda el prompt de planeación', async ($, on) => {
+test('/planear manda el prompt de planeación', async ($: any, on) => {
   bottom(on)
   const r = await $.command.run({ command: 'planear', args: 'una app' })
   expect(r.text).toContain('planeando')
 })
 
-test('"quiero hacer" activa la planeación sin comando', async ($, on) => {
+test('"quiero hacer" activa la planeación sin comando', async ($: any, on) => {
   bottom(on)
   const r = await $.prompt.submit({ text: 'quiero hacer una app de citas' })
   expect(r.context?.join(' ')).toContain('Proyecto nuevo detectado')
 })
 
-test('seguridad: comando peligroso, .env y base de datos', async ($, on) => {
+test('seguridad: comando peligroso, .env y base de datos', async ($: any, on) => {
   bottom(on)
   await $.prompt.submit({ text: 'borra todo' })
   const rm = await $.tool.call({ tool: 'Bash', command: 'rm -rf /tmp/x' })
@@ -57,7 +57,7 @@ test('seguridad: comando peligroso, .env y base de datos', async ($, on) => {
   expect(JSON.stringify(key)).toContain('clave')
 })
 
-test('etapa 3: /vigilar, /herramienta y /limpiar responden y no escriben', async ($, on) => {
+test('etapa 3: /vigilar, /herramienta y /limpiar responden y no escriben', async ($: any, on) => {
   bottom(on)
   for (const command of ['vigilar', 'herramienta', 'limpiar']) {
     const r = await $.command.run({ command, args: 'x' })
@@ -65,8 +65,23 @@ test('etapa 3: /vigilar, /herramienta y /limpiar responden y no escriben', async
   }
 })
 
-test('"qué herramienta" activa la elección de herramienta', async ($, on) => {
+test('"qué herramienta" activa la elección de herramienta', async ($: any, on) => {
   bottom(on)
   const r = await $.prompt.submit({ text: 'qué herramienta uso para probar mi web' })
   expect(r.context?.join(' ')).toContain('Elección de herramienta')
+})
+
+test('"generar" también autoriza', async ($: any, on) => {
+  bottom(on)
+  const a = await $.prompt.submit({ text: 'termina de generar todo' })
+  expect(a.context?.join(' ')).toContain('puedes escribir código')
+})
+
+test('/planear pide verificar con context7 y github si están conectados', async ($: any, on) => {
+  bottom(on)
+  const r = await $.prompt.submit({ text: 'quiero hacer una app' })
+  const text = r.context?.join(' ') ?? ''
+  expect(text).toContain('context7')
+  expect(text).toContain('no inventes')
+  expect(text).toContain('OWASP Security Audit')
 })

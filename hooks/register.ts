@@ -7,7 +7,7 @@ const PLAN_MARK = '[dragon:plan]'
 const TIER_OF_WORD: Record<string, Tier> = { ligero: 'haiku', normal: 'sonnet', pesado: 'opus' }
 const WORD_OF_TIER: Record<Tier, string> = { haiku: 'ligero', sonnet: 'normal', opus: 'pesado' }
 
-const GENERA = /(^|[^\p{L}])(genera|génera|generalo|genéralo|vuélvemelo a pasar|vuelvemelo a pasar)([^\p{L}]|$)/iu
+const GENERA = /(^|[^\p{L}])(genera|génera|generar|generarlo|generalo|genéralo|vuélvemelo a pasar|vuelvemelo a pasar)([^\p{L}]|$)/iu
 const OPUS = /planea|planeaci|arquitectura|seguridad|evalu|decisi[oó]n|regla nueva|reglas nuevas|viabilidad|auditor/i
 const CODE = /genera|código|codigo|funci[oó]n|bug|script|archivo|implementa|refactor|corrige|arregla|error/i
 const SHORT = /^(s[ií]|no|ok|vale|listo|gracias|dale|perfecto|contin[uú]a|y\?|cu[aá]l|qu[eé]|c[oó]mo|d[oó]nde|cu[aá]nto)\b/i
@@ -62,8 +62,10 @@ const planBody = (goal: string): string[] => [
     `1. Revisa esta lista: ${CHECKLIST}.`,
     '2. Di si es posible: "viable", "viable con condiciones" o "no recomendable". Verifica límites y requisitos reales con búsqueda web y cita la fuente; si no pudiste verificar algo, dilo. Es un juicio con la información disponible, no una garantía; en temas legales o de cumplimiento, recomienda confirmar con un especialista.',
     '2b. Si existen tarjetas en normas/*.md, aplícalas y cita cuál usaste.',
+    '2c. Si el servidor MCP de context7 está conectado, úsalo para verificar versiones y APIs de librerías; si el de github está conectado, úsalo para leer el repositorio. Si alguno no está conectado, dilo en una línea y sigue sin él: no inventes versiones ni APIs.',
     `3. Aprovecha lo ya instalado, sin rehacer nada: ${INSTALLED}. Indica en qué paso usarías cada uno. Si falta algo, di cuál y por qué es seguro.`,
     '4. Entrega la ficha: objetivo, tipo, dispositivos y plataformas, permisos, costos, riesgos, pasos, y al final "Por decidir" con lo que el usuario aún no decidió.',
+    '4b. Si el proyecto tiene base de datos, usa DB Schema Spy para ver el esquema y recuerda que Dragon la deja en solo lectura (/basedatos para escribir). Antes de publicar, sugiere OWASP Security Audit.',
     '5. Ofrece guardar la ficha en fichas/<proyecto>/ficha.md cuando el usuario diga "genera".',
   ]
 
@@ -91,7 +93,7 @@ const herramientaPrompt = (need: string): string =>
     PLAN_MARK,
     'NO escribas código ni archivos. Elige la herramienta correcta.',
     need.trim() === '' ? 'Pregunta qué necesita hacer el usuario.' : `Necesidad: ${need.trim()}`,
-    `1. Primero busca entre lo ya instalado y úsalo, sin rehacer nada: ${INSTALLED}; también las skills y herramientas que ya tienes en esta sesión.`,
+    `1. Primero busca entre lo ya instalado y úsalo, sin rehacer nada: ${INSTALLED}; también las skills y herramientas que ya tienes en esta sesión. Si context7 o github están conectados, úsalos; si no, dilo en una línea.`,
     '2. Solo si nada sirve, busca en el catálogo de plugins y recomienda como máximo 2, y solo seguros: oficiales o de socios verificados, de alcance contenido, sin permisos amplios ni cuentas externas. Di qué permisos piden y por qué sirven.',
     '3. Responde: herramienta elegida, por qué, y cómo usarla en una línea.',
   ].join('\n')

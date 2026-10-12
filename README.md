@@ -45,9 +45,15 @@ Tarjetas en `normas/` (seguridad, pruebas, APIs, datos, UX/UI, publicación). `/
 - Bases de datos en solo lectura desde la terminal (`psql`, `mysql`, `sqlite3`...); `/basedatos` permite escribir.
 - Límite: son patrones de texto, no un análisis completo; un comando muy distinto puede escaparse.
 
+## Primera sesión nueva
+
+1. Instala (cuando la rama esté fusionada a la principal): `/plugin marketplace add dragonsteam3141-dotcom/Proyecto-IA` y `/plugin install dragon-asistente@dragon`.
+2. Para que `context7` y `github` conecten, el entorno necesita salida de red a `mcp.context7.com` y `api.githubcopilot.com` (Editar entorno, Acceso a la red) y una sesión nueva. Sin eso Dragon sigue funcionando y lo dice en una línea.
+3. Prueba con `/dragon` y `/estado`.
+
 ## Reglas
 
-- **Candado de "genera":** `Edit`, `Write` y `NotebookEdit` se niegan si tu último mensaje no dice "genera" (o "vuélvemelo a pasar"). "general" no cuenta.
+- **Candado de "genera":** `Edit`, `Write` y `NotebookEdit` se niegan si tu último mensaje no dice "genera" ("generar" o "vuélvemelo a pasar" también cuentan; "general" no). "general" no cuenta.
 - **Modelo por tarea (solo sugiere):** Haiku para confirmaciones y preguntas cortas; Sonnet por defecto; Opus para planeación, arquitectura, seguridad y decisiones grandes, o si Sonnet falla dos veces seguidas. Si `/modelo` no puede cambiarlo, te avisa que escribas `/model <nombre>`.
 - **Ahorro:** respuestas breves y aviso de `/compact` cada 20 turnos.
 - **Reutiliza lo instalado:** `/planear` usa Data, DB Schema Spy, OWASP Security Audit, playwright, context7, github y los demás antes de proponer algo nuevo.

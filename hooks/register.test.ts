@@ -56,3 +56,17 @@ test('seguridad: comando peligroso, .env y base de datos', async ($, on) => {
   const key = await $.tool.call({ tool: 'Write', file_path: '/app/a.ts', content: 'k="ghp_' + 'a'.repeat(36) + '"' })
   expect(JSON.stringify(key)).toContain('clave')
 })
+
+test('etapa 3: /vigilar, /herramienta y /limpiar responden y no escriben', async ($, on) => {
+  bottom(on)
+  for (const command of ['vigilar', 'herramienta', 'limpiar']) {
+    const r = await $.command.run({ command, args: 'x' })
+    expect(r.text).toBeDefined()
+  }
+})
+
+test('"qué herramienta" activa la elección de herramienta', async ($, on) => {
+  bottom(on)
+  const r = await $.prompt.submit({ text: 'qué herramienta uso para probar mi web' })
+  expect(r.context?.join(' ')).toContain('Elección de herramienta')
+})

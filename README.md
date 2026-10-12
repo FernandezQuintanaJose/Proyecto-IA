@@ -20,6 +20,9 @@ Mod de Claude Code (plugin `dragon-asistente`) con un repositorio general: mod, 
 | `/basedatos` | Alterna la base entre solo lectura (por defecto) y escritura |
 | `/ahorro` | Activa o apaga el ahorro de tokens |
 | `/candado` | Activa o apaga el candado de "genera" |
+| `/vigilar [plataformas]` | Busca en la web cambios y fechas límite en tus plataformas, con fuente |
+| `/herramienta [necesidad]` | Elige primero entre lo ya instalado; solo si falta, recomienda hasta 2 plugins seguros |
+| `/limpiar` | Informe de lo que sobra; solo lee, borrar requiere "genera" y lista exacta |
 | `/estado` | Modelo, turnos, ahorro y candado |
 
 ## Automático
@@ -27,6 +30,12 @@ Mod de Claude Code (plugin `dragon-asistente`) con un repositorio general: mod, 
 - "quiero hacer/crear/construir..." activa la planeación sin escribir `/planear`.
 - "qué me falta / por decidir" activa `/omisiones`.
 - El modelo cambia solo entre Haiku y Sonnet tras 2 mensajes seguidos con la misma sugerencia; para subir a Opus pregunta. Si no puede cambiarlo, te avisa que escribas `/model <nombre>`.
+
+- "qué herramienta uso" activa `/herramienta`.
+
+## Normas (etapa 3)
+
+Tarjetas en `normas/` (seguridad, pruebas, APIs, datos, UX/UI, publicación). `/planear` las aplica.
 
 ## Seguridad (etapa 2)
 

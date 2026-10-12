@@ -1,0 +1,7 @@
+{
+  "name": "dragon",
+  "owner": { "name": "dragonsteam3141-dotcom" },
+  "plugins": [
+    { "name": "dragon-asistente", "source": "./", "description": "Modelo justo por tarea, candado de 'genera', ahorro de tokens y /planear." }
+  ]
+}

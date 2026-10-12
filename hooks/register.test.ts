@@ -31,3 +31,28 @@ test('/planear manda el prompt de planeación', async ($, on) => {
   const r = await $.command.run({ command: 'planear', args: 'una app' })
   expect(r.text).toContain('planeando')
 })
+
+test('"quiero hacer" activa la planeación sin comando', async ($, on) => {
+  bottom(on)
+  const r = await $.prompt.submit({ text: 'quiero hacer una app de citas' })
+  expect(r.context?.join(' ')).toContain('Proyecto nuevo detectado')
+})
+
+test('seguridad: comando peligroso, .env y base de datos', async ($, on) => {
+  bottom(on)
+  await $.prompt.submit({ text: 'borra todo' })
+  const rm = await $.tool.call({ tool: 'Bash', command: 'rm -rf /tmp/x' })
+  expect(JSON.stringify(rm)).toContain('peligroso')
+  const db = await $.tool.call({ tool: 'Bash', command: 'psql -c "DROP TABLE users"' })
+  expect(JSON.stringify(db)).toContain('solo lectura')
+  const sel = await $.tool.call({ tool: 'Bash', command: 'psql -c "select 1"' })
+  expect(JSON.stringify(sel)).not.toContain('solo lectura')
+  await $.prompt.submit({ text: 'autorizo' })
+  const ok = await $.tool.call({ tool: 'Bash', command: 'rm -rf /tmp/x' })
+  expect(JSON.stringify(ok)).not.toContain('peligroso')
+  await $.prompt.submit({ text: 'genera' })
+  const env = await $.tool.call({ tool: 'Write', file_path: '/app/.env', content: 'A=1' })
+  expect(JSON.stringify(env)).toContain('sensible')
+  const key = await $.tool.call({ tool: 'Write', file_path: '/app/a.ts', content: 'k="ghp_' + 'a'.repeat(36) + '"' })
+  expect(JSON.stringify(key)).toContain('clave')
+})

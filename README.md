@@ -16,10 +16,25 @@ Mod de Claude Code (plugin `dragon-asistente`) con un repositorio general: mod, 
 | `/dragon` | Menú |
 | `/planear [objetivo]` | Planeación completa: revisa la lista, dice si es viable (con fuentes), usa los plugins ya instalados y entrega la ficha |
 | `/omisiones` | Lo que aún no has decidido (lee `fichas/*/ficha.md`) |
-| `/modelo ligero\|normal\|pesado` | Haiku, Sonnet u Opus |
+| `/modelo ligero\|normal\|pesado\|auto\|manual` | Fija Haiku, Sonnet u Opus, o activa/apaga el cambio automático |
+| `/basedatos` | Alterna la base entre solo lectura (por defecto) y escritura |
 | `/ahorro` | Activa o apaga el ahorro de tokens |
 | `/candado` | Activa o apaga el candado de "genera" |
 | `/estado` | Modelo, turnos, ahorro y candado |
+
+## Automático
+
+- "quiero hacer/crear/construir..." activa la planeación sin escribir `/planear`.
+- "qué me falta / por decidir" activa `/omisiones`.
+- El modelo cambia solo entre Haiku y Sonnet tras 2 mensajes seguidos con la misma sugerencia; para subir a Opus pregunta. Si no puede cambiarlo, te avisa que escribas `/model <nombre>`.
+
+## Seguridad (etapa 2)
+
+- Niega comandos peligrosos (`rm -rf`, `git push --force`, `git reset --hard`, `curl | sh`...) salvo que tu mensaje diga "autorizo".
+- No lee ni edita `.env`, llaves y credenciales.
+- Niega escribir código que traiga claves o tokens.
+- Bases de datos en solo lectura desde la terminal (`psql`, `mysql`, `sqlite3`...); `/basedatos` permite escribir.
+- Límite: son patrones de texto, no un análisis completo; un comando muy distinto puede escaparse.
 
 ## Reglas
 
@@ -31,4 +46,4 @@ Mod de Claude Code (plugin `dragon-asistente`) con un repositorio general: mod, 
 
 ## Estado
 
-Etapa 1. Validado y con 3 pruebas; aún no probado en una sesión real. Etapas 2 (seguridad) y 3 (normas, `/vigilar`, `/herramienta`, `/limpiar`) pendientes.
+Etapas 1 y 2. Validado y con 5 pruebas; aún no probado en una sesión real. Etapa 3 (normas, `/vigilar`, `/herramienta`, `/limpiar`) pendientes.
